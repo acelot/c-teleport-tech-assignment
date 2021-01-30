@@ -6,6 +6,13 @@
 docker-compose build && docker-compose up
 ```
 
+## ENV-variables
+
+| Variable                     | Description                                                             |
+|------------------------------|-------------------------------------------------------------------------|
+| `REDIS_DSN`                  | Connection string to Redis (omit variable to use memory cache)          |
+| `PLACES_API_CLIENT_BASE_URL` | Places API Client base URL (default: https://places-dev.cteleport.com/) |
+
 ## Endpoints
 
 | URL                                           | Description                               |
@@ -24,6 +31,7 @@ Distance API example URLs:
 - Microsoft .NET 5.0 ([dotnet-install.sh](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-install-script))
 - Docker version 18 or higher
 - Visual Studio Code with [C# extension](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp)
+- Redis for response caching (optional)
 
 ## Building
 

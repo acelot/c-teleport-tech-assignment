@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace CTeleport.AirportsService.Api.DistanceApi.ValueObjects
 {
-    public class Airport
+    public sealed class Airport
     {
         [JsonPropertyName("type")]
         [Required]

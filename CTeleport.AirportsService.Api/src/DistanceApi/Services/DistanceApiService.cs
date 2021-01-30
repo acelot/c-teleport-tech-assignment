@@ -43,7 +43,7 @@ namespace CTeleport.AirportsService.Api.DistanceApi.Services
                     );
                 }
             }
-            catch (PlacesApiClientException e)
+            catch (PlacesServiceApiClientException e)
             {
                 throw new DistanceApiServiceException("Cannot get airport", e);
             }
@@ -51,16 +51,19 @@ namespace CTeleport.AirportsService.Api.DistanceApi.Services
 
         public double CalculateDistance(Location origin, Location destination, DistanceUnit unit)
         {
+            var distanceUnit = unit switch
+            {
+                DistanceUnit.Meters => Geolocation.DistanceUnit.Meters,
+                DistanceUnit.Kilometers => Geolocation.DistanceUnit.Kilometers,
+                DistanceUnit.Miles => Geolocation.DistanceUnit.Miles,
+                DistanceUnit.NauticalMiles => Geolocation.DistanceUnit.NauticalMiles,
+            };
+
             return Geolocation.GeoCalculator.GetDistance(
                 origin.Latitude, origin.Longitude,
                 destination.Latitude, destination.Longitude,
                 0,
-                unit switch {
-                    DistanceUnit.Meters => Geolocation.DistanceUnit.Meters,
-                    DistanceUnit.Kilometers => Geolocation.DistanceUnit.Kilometers,
-                    DistanceUnit.Miles => Geolocation.DistanceUnit.Miles,
-                    DistanceUnit.NauticalMiles => Geolocation.DistanceUnit.NauticalMiles,
-                }
+                distanceUnit
             );
         }
     }

@@ -7,7 +7,7 @@ namespace CTeleport.AirportsService.Api.DistanceApi.Extensions
     {
         public static IServiceCollection AddDistanceApi(this IServiceCollection services)
         {
-            services.AddTransient<DistanceApiService>();
+            services.AddScoped<DistanceApiService>();
             
             return services;
         }

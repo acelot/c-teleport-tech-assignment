@@ -1,9 +1,8 @@
 using System;
-using CTeleport.PlacesService.ApiClient.Exceptions;
 
 namespace CTeleport.PlacesService.ApiClient.AirportsApi.Exceptions
 {
-    public class GetAirportException : PlacesApiClientException
+    public sealed class GetAirportException : AirportsApiException
     {
         public GetAirportException(string message) : base(message) { }
 

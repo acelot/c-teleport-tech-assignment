@@ -1,5 +1,3 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using CTeleport.AirportsService.Api.DistanceApi.Extensions;
 using CTeleport.PlacesService.ApiClient.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -10,8 +8,11 @@ using Microsoft.OpenApi.Models;
 
 namespace CTeleport.AirportsService.Api
 {
-    public class Startup
+    public sealed class Startup
     {
+        private const string RedisDsnEnv = "REDIS_DSN";
+        private const string PlacesApiClientBaseUrlEnv = "PLACES_API_CLIENT_BASE_URL";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -21,7 +22,28 @@ namespace CTeleport.AirportsService.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddPlacesApiClient();
+            var redisDsn = System.Environment.GetEnvironmentVariable(RedisDsnEnv);
+            if (redisDsn is string)
+            {
+                services.AddStackExchangeRedisCache(c =>
+                {
+                    c.Configuration = redisDsn;
+                });
+            }
+            else
+            {
+                services.AddMemoryCache();
+            }
+
+            services.AddResponseCaching();
+
+            var placesApiClientBaseUrl = System.Environment.GetEnvironmentVariable(PlacesApiClientBaseUrlEnv);
+            if (placesApiClientBaseUrl is null)
+            {
+                throw new System.ArgumentException($"{PlacesApiClientBaseUrlEnv} environment variable not set!");
+            }
+
+            services.AddPlacesServiceApiClient(new System.Uri(placesApiClientBaseUrl));
             services.AddDistanceApi();
 
             services.AddControllers();
@@ -33,7 +55,10 @@ namespace CTeleport.AirportsService.Api
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseResponseCaching();
+
             app.UseRouting();
+
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {

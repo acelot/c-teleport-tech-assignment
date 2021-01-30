@@ -4,7 +4,7 @@ using CTeleport.AirportsService.Api.DistanceApi.Enums;
 
 namespace CTeleport.AirportsService.Api.DistanceApi.ValueObjects
 {
-    public class Distance
+    public sealed class Distance
     {
         [JsonPropertyName("type")]
         [Required]

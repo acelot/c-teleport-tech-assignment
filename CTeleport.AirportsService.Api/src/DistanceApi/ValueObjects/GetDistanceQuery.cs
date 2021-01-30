@@ -3,7 +3,7 @@ using CTeleport.AirportsService.Api.DistanceApi.Enums;
 
 namespace CTeleport.AirportsService.Api.DistanceApi.ValueObjects
 {
-    public class GetDistanceQuery
+    public sealed class GetDistanceQuery
     {
         [Required(ErrorMessage = "Origin airport IATA code is required")]
         [MinLength(3, ErrorMessage = "IATA code must contain exactly 3 letters")]

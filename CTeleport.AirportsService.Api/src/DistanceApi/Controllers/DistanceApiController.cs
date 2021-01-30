@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using CTeleport.AirportsService.Api.DistanceApi.Services;
 using CTeleport.AirportsService.Api.DistanceApi.ValueObjects;
@@ -9,11 +10,13 @@ namespace CTeleport.AirportsService.Api.DistanceApi.Controllers
 {
     [ApiController]
     [Route("/distance")]
-    public class DistanceApiController : ControllerBase
+    public sealed class DistanceApiController : ControllerBase
     {
         private readonly ILogger<DistanceApiController> _logger;
 
         private readonly DistanceApiService _distanceApiService;
+
+        private const int _responseCacheDurationSecs = 24 * 60 * 60;
 
         public DistanceApiController(ILogger<DistanceApiController> logger, DistanceApiService distanceApiService)
         {
@@ -24,6 +27,7 @@ namespace CTeleport.AirportsService.Api.DistanceApi.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(Distance), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ResponseCache(Duration = _responseCacheDurationSecs)]
         public async Task<IActionResult> Get([FromQuery] GetDistanceQuery query)
         {
             var originAirport = await this._distanceApiService.GetAirport(query.Origin);

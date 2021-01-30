@@ -11,11 +11,11 @@ using OneOf;
 
 namespace CTeleport.PlacesService.ApiClient
 {
-    public class PlacesApiClient : IAirportsApi
+    public sealed class PlacesServiceApiClient : IAirportsApi
     {
         public readonly HttpClient _httpClient;
 
-        public PlacesApiClient(HttpClient httpClient)
+        public PlacesServiceApiClient(HttpClient httpClient)
         {
             this._httpClient = httpClient;
         }

@@ -7,22 +7,20 @@ namespace CTeleport.PlacesService.ApiClient.Extensions
 {
     public static class IServiceCollectionExtensions
     {
-        public const string DevBaseAddress = "https://places-dev.cteleport.com/";
-
-        public static IServiceCollection AddPlacesApiClient(
+        public static IServiceCollection AddPlacesServiceApiClient(
             this IServiceCollection services,
-            string baseAddress = DevBaseAddress
+            Uri baseAddress
         )
         {
-            services.AddHttpClient<PlacesApiClient>(client => ConfigureClient(client, baseAddress));
-            services.AddHttpClient<IAirportsApi, PlacesApiClient>(client => ConfigureClient(client, baseAddress));
+            services.AddHttpClient<PlacesServiceApiClient>(client => ConfigureClient(client, baseAddress));
+            services.AddHttpClient<IAirportsApi, PlacesServiceApiClient>(client => ConfigureClient(client, baseAddress));
 
             return services;
         }
 
-        private static void ConfigureClient(HttpClient client, string baseAddress)
+        private static void ConfigureClient(HttpClient client, Uri baseAddress)
         {
-            client.BaseAddress = new Uri(baseAddress);
+            client.BaseAddress = baseAddress;
         }
     }
 }

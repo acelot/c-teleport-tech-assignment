@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace CTeleport.PlacesService.ApiClient.AirportsApi.ValueObjects
 {
-    public class Airport
+    public sealed class Airport
     {
         [JsonPropertyName("name")]
         public string Name { get; set; } = default!;

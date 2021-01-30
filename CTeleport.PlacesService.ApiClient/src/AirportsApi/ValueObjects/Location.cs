@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace CTeleport.PlacesService.ApiClient.AirportsApi.ValueObjects
 {
-    public class Location
+    public sealed class Location
     {
         [JsonPropertyName("lat")]
         public double Latitude { get; set; }
