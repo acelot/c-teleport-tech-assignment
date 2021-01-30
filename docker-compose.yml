@@ -1,0 +1,15 @@
+version: "3.7"
+
+services:
+  cteleport-airports-service-api:
+    image: cteleport-airports-service-api:latest
+    build:
+      dockerfile: Dockerfile
+      context: ./
+    ports:
+      - 8000:80
+    networks:
+      - cteleport-network
+
+networks:
+  cteleport-network:
