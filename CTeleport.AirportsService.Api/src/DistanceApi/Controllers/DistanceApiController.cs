@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using CTeleport.AirportsService.Api.DistanceApi.Exceptions;
 using CTeleport.AirportsService.Api.DistanceApi.Services;
 using CTeleport.AirportsService.Api.DistanceApi.ValueObjects;
+using CTeleport.AirportsService.Api.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -20,15 +22,24 @@ namespace CTeleport.AirportsService.Api.DistanceApi.Controllers
 
         private readonly DistanceApiService _distanceApiService;
 
+        private readonly IGeoUtils _geoUtils;
+
+        private readonly TimeSpan _getAirportsTimeout = TimeSpan.FromSeconds(5);
+
         private const int _responseCacheDurationSecs = 24 * 60 * 60;
 
         /// <summary>
         /// Controller constructor
         /// </summary>
-        public DistanceApiController(ILogger<DistanceApiController> logger, DistanceApiService distanceApiService)
+        public DistanceApiController(
+            ILogger<DistanceApiController> logger, 
+            DistanceApiService distanceApiService,
+            IGeoUtils geoUtils
+        )
         {
             this._logger = logger;
             this._distanceApiService = distanceApiService;
+            this._geoUtils = geoUtils;
         }
 
         /// <summary>
@@ -48,29 +59,35 @@ namespace CTeleport.AirportsService.Api.DistanceApi.Controllers
         {
             try
             {
-                var originAirport = await this._distanceApiService.GetAirport(query.Origin);
-                if (originAirport is null)
+                using var cts = new CancellationTokenSource(_getAirportsTimeout);
+
+                var originAirport = await this._distanceApiService.GetAirport(query.Origin, cts.Token);
+                if (originAirport.IsT1)
                 {
                     ModelState.AddModelError(nameof(GetDistanceQuery.Origin), "Origin airport not found");
 
                     return ValidationProblem(ModelState);
                 }
 
-                var destinationAirport = await this._distanceApiService.GetAirport(query.Destination);
-                if (destinationAirport is null)
+                var destinationAirport = await this._distanceApiService.GetAirport(query.Destination, cts.Token);
+                if (destinationAirport.IsT1)
                 {
                     ModelState.AddModelError(nameof(GetDistanceQuery.Destination), "Destination airport not found");
 
                     return ValidationProblem(ModelState);
                 }
 
-                var distance = this._distanceApiService.CalculateDistance(originAirport.Location, destinationAirport.Location, query.Unit);
+                var distance = this._geoUtils.CalculateDistance(
+                    originAirport.AsT0.Location, 
+                    destinationAirport.AsT0.Location, 
+                    query.Unit
+                );
 
                 return Ok(
                     new Distance
                     {
-                        Origin = originAirport,
-                        Destination = destinationAirport,
+                        Origin = originAirport.AsT0,
+                        Destination = destinationAirport.AsT0,
                         Length = distance,
                         Unit = query.Unit,
                     }

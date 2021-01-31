@@ -1,4 +1,5 @@
 using CTeleport.AirportsService.Api.DistanceApi.Extensions;
+using CTeleport.AirportsService.Api.Utils;
 using CTeleport.PlacesService.ApiClient.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -55,6 +56,7 @@ namespace CTeleport.AirportsService.Api
                 throw new System.ArgumentException($"{PlacesApiClientBaseUrlEnv} environment variable not set!");
             }
 
+            services.AddSingleton<IGeoUtils, GeoUtils>();
             services.AddPlacesServiceApiClient(new System.Uri(placesApiClientBaseUrl));
             services.AddDistanceApi();
 

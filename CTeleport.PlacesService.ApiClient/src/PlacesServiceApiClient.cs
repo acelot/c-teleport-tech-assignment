@@ -1,12 +1,11 @@
-using System;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using CTeleport.PlacesService.ApiClient.AirportsApi;
 using CTeleport.PlacesService.ApiClient.AirportsApi.Exceptions;
 using CTeleport.PlacesService.ApiClient.AirportsApi.ValueObjects;
+using CTeleport.PlacesService.ApiClient.HttpClientAbstractions;
 using OneOf;
 
 namespace CTeleport.PlacesService.ApiClient
@@ -16,12 +15,12 @@ namespace CTeleport.PlacesService.ApiClient
     /// </summary>
     public sealed class PlacesServiceApiClient : IAirportsApi
     {
-        private readonly HttpClient _httpClient;
+        private readonly IHttpClient _httpClient;
 
         /// <summary>
         /// Places Service API Client constructor
         /// </summary>
-        public PlacesServiceApiClient(HttpClient httpClient)
+        public PlacesServiceApiClient(IHttpClient httpClient)
         {
             this._httpClient = httpClient;
         }

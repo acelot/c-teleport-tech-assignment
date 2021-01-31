@@ -1,12 +1,13 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace CTeleport.AirportsService.Api.DistanceApi.ValueObjects
+namespace CTeleport.AirportsService.Api.ValueObjects
 {
     /// <summary>
     /// Location
     /// </summary>
-    public sealed class Location
+    public sealed class Location : IEquatable<Location>
     {
         /// <inheritdoc/>
         [JsonPropertyName("type")]
@@ -24,5 +25,15 @@ namespace CTeleport.AirportsService.Api.DistanceApi.ValueObjects
         /// </summary>
         [JsonPropertyName("lon")]
         public double Longitude { get; init; }
+
+        /// <summary>
+        /// Equality checker
+        /// </summary>
+        public bool Equals(Location? other)
+        {
+            return other is not null
+                && Latitude == other.Latitude
+                && Longitude == other.Longitude;
+        }
     }
 }

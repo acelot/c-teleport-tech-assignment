@@ -1,4 +1,4 @@
-namespace CTeleport.AirportsService.Api.DistanceApi.ValueObjects
+namespace CTeleport.AirportsService.Api.ValueObjects
 {
     /// <summary>
     /// A value object that provides its type name

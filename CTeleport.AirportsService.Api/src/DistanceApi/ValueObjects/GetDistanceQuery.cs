@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using CTeleport.AirportsService.Api.DistanceApi.Enums;
+using CTeleport.AirportsService.Api.Enums;
 
 namespace CTeleport.AirportsService.Api.DistanceApi.ValueObjects
 {

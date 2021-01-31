@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace CTeleport.AirportsService.Api.DistanceApi.Enums
+namespace CTeleport.AirportsService.Api.Enums
 {
     /// <summary>
     /// Distance unit enumeration

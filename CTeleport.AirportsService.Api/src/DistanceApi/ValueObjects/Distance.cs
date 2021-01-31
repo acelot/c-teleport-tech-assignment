@@ -1,13 +1,14 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using CTeleport.AirportsService.Api.DistanceApi.Enums;
+using CTeleport.AirportsService.Api.Enums;
+using CTeleport.AirportsService.Api.ValueObjects;
 
 namespace CTeleport.AirportsService.Api.DistanceApi.ValueObjects
 {
     /// <summary>
     /// Distance
     /// </summary>
-    public sealed class Distance
+    public sealed class Distance : ITypedValueObject
     {
         /// <inheritdoc/>
         [JsonPropertyName("type")]

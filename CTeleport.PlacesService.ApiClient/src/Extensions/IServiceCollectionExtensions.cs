@@ -1,6 +1,6 @@
 using System;
-using System.Net.Http;
 using CTeleport.PlacesService.ApiClient.AirportsApi;
+using CTeleport.PlacesService.ApiClient.HttpClientAbstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CTeleport.PlacesService.ApiClient.Extensions
@@ -18,13 +18,16 @@ namespace CTeleport.PlacesService.ApiClient.Extensions
             Uri baseAddress
         )
         {
-            services.AddHttpClient<PlacesServiceApiClient>(client => ConfigureClient(client, baseAddress));
-            services.AddHttpClient<IAirportsApi, PlacesServiceApiClient>(client => ConfigureClient(client, baseAddress));
+            services.AddHttpClient<HttpClient>(client => ConfigureClient(client, baseAddress));
+            services.AddHttpClient<IHttpClient, HttpClient>(client => ConfigureClient(client, baseAddress));
+
+            services.AddScoped<PlacesServiceApiClient>();
+            services.AddScoped<IAirportsApi, PlacesServiceApiClient>();
 
             return services;
         }
 
-        private static void ConfigureClient(HttpClient client, Uri baseAddress)
+        private static void ConfigureClient(System.Net.Http.HttpClient client, Uri baseAddress)
         {
             client.BaseAddress = baseAddress;
         }
