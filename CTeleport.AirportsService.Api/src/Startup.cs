@@ -8,18 +8,30 @@ using Microsoft.OpenApi.Models;
 
 namespace CTeleport.AirportsService.Api
 {
+    /// <summary>
+    /// App startup
+    /// </summary>
     public sealed class Startup
     {
         private const string RedisDsnEnv = "REDIS_DSN";
         private const string PlacesApiClientBaseUrlEnv = "PLACES_API_CLIENT_BASE_URL";
 
+        /// <summary>
+        /// App startup constructor
+        /// </summary>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
+        /// <summary>
+        /// App configuration
+        /// </summary>
         public IConfiguration Configuration { get; }
 
+        /// <summary>
+        /// Configures sevices
+        /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
             var redisDsn = System.Environment.GetEnvironmentVariable(RedisDsnEnv);
@@ -50,9 +62,18 @@ namespace CTeleport.AirportsService.Api
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CTeleport.AirportsService.Api", Version = "v1" });
+
+                var xmlDocPath = System.IO.Path.Combine(
+                    System.AppContext.BaseDirectory, 
+                    System.Reflection.Assembly.GetExecutingAssembly().GetName().Name ?? ""
+                );
+                c.IncludeXmlComments(xmlDocPath + ".xml");
             });
         }
 
+        /// <summary>
+        /// Configures app
+        /// </summary>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseResponseCaching();

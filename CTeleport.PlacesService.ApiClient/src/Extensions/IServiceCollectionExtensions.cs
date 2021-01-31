@@ -5,8 +5,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CTeleport.PlacesService.ApiClient.Extensions
 {
+    /// <summary>
+    /// Services configuration helpers
+    /// </summary>
     public static class IServiceCollectionExtensions
     {
+        /// <summary>
+        /// Adds Places Service API Client
+        /// </summary>
         public static IServiceCollection AddPlacesServiceApiClient(
             this IServiceCollection services,
             Uri baseAddress

@@ -2,15 +2,10 @@ using NUnit.Framework;
 
 namespace CTeleport.PlacesService.ApiClient.Tests
 {
-    public class PlacesApiClientTest
+    public class PlacesServiceApiClientTest
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
-
         [Test]
-        public void Test1()
+        public void TestGetAirport_IataCodePassed_ReturnsAirport()
         {
             Assert.Pass();
         }

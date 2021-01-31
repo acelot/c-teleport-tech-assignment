@@ -9,17 +9,26 @@ using CTeleport.PlacesService.ApiClient.Exceptions;
 
 namespace CTeleport.AirportsService.Api.DistanceApi.Services
 {
+    /// <summary>
+    /// Distance API Service
+    /// </summary>
     public class DistanceApiService
     {
         private readonly IAirportsApi _airportsApi;
 
         private readonly TimeSpan _getAirportLocationTimeout = TimeSpan.FromSeconds(5);
 
+        /// <summary>
+        /// Distance API Service contstructor
+        /// </summary>
         public DistanceApiService(IAirportsApi airportsApi)
         {
             this._airportsApi = airportsApi;
         }
 
+        /// <summary>
+        /// Fetches an airport by IATA code
+        /// </summary>
         public async Task<Airport?> GetAirport(string iataCode)
         {
             try
@@ -49,14 +58,17 @@ namespace CTeleport.AirportsService.Api.DistanceApi.Services
             }
         }
 
+        /// <summary>
+        /// Calculates the distance between two locations in given unit
+        /// </summary>
         public double CalculateDistance(Location origin, Location destination, DistanceUnit unit)
         {
             var distanceUnit = unit switch
             {
-                DistanceUnit.Meters => Geolocation.DistanceUnit.Meters,
                 DistanceUnit.Kilometers => Geolocation.DistanceUnit.Kilometers,
                 DistanceUnit.Miles => Geolocation.DistanceUnit.Miles,
                 DistanceUnit.NauticalMiles => Geolocation.DistanceUnit.NauticalMiles,
+                _ => Geolocation.DistanceUnit.Meters,
             };
 
             return Geolocation.GeoCalculator.GetDistance(

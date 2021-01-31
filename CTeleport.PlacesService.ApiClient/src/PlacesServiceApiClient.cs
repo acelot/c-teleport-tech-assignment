@@ -11,15 +11,22 @@ using OneOf;
 
 namespace CTeleport.PlacesService.ApiClient
 {
+    /// <summary>
+    /// Places Service API Client implementation
+    /// </summary>
     public sealed class PlacesServiceApiClient : IAirportsApi
     {
-        public readonly HttpClient _httpClient;
+        private readonly HttpClient _httpClient;
 
+        /// <summary>
+        /// Places Service API Client constructor
+        /// </summary>
         public PlacesServiceApiClient(HttpClient httpClient)
         {
             this._httpClient = httpClient;
         }
 
+        /// <inheritdoc/>
         public async Task<OneOf<Airport, AirportNotFound>> GetAirport(string iataCode, CancellationToken ct)
         {
             try
@@ -39,10 +46,6 @@ namespace CTeleport.PlacesService.ApiClient
                     return new AirportNotFound { IataCode = iataCode };
                 }
 
-                throw;
-            }
-            catch (Exception e)
-            {
                 throw new GetAirportException("Cannot get airport", e);
             }
         }
